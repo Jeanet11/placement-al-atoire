@@ -1,23 +1,39 @@
 $.ajax({
-	url: "http://spreadsheets.google.com/feeds/list/1-oYlvGP573O4ml4AzgapLhK_KoEqlfDIzvSnWz48_nQ/od6/public/values?alt=json",
+	// url de la google sheet contennat le tableau avec les noms et images
+	
 
 	success : function(data) {
-		console.log (data);
-		
+// fonction qui effectue un tri aléatoire du tableau
+function shuffle(arra1) {
+	var ctr = arra1.length, temp, index;
 
-		var tableau = data.feed.entry;
-		for (var i = 0; i<tableau.length;i++) {
-			var prenom = tableau[i].gsx$prénoms.$t;
-			var url = tableau[i].gsx$url.$t;
-			
-			$(".id"+i).html(prenom + "<br/><img src='" + url + "'/>")
-		}
+// tant qu'il y a des elements dans l'array
+while (ctr > 0) {
+// on prend un indice au hasard
+index = Math.floor(Math.random() * ctr);
+// on désincrémente ctr de 1 en 1
+ctr--;
+// et on échange le dernier élément avec lui
+temp = arra1[ctr];
+arra1[ctr] = arra1[index];
+arra1[index] = temp;
+}
+return arra1;
+}
+
+//on récupère le tableau avec les 15 objets - eleves		
+var tableau = data.feed.entry;
+var tableauMelange = shuffle(tableau);
 
 
-	},
+for (var i = 0; i<tableauMelange.length;i++) {
+	var prenom = tableauMelange[i].gsx$prénoms.$t;
+	var url = tableauMelange[i].gsx$url.$t;
 
-	error : function(data) {
-		console.log("error");
-	}
+	// insertion dans chaque case 
+	$(".id"+i).html(prenom + "<br/><img src='" + url + "'/>");
+}
 
-})
+}
+});
+
